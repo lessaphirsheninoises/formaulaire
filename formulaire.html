@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOLLZ Auditions - Art & Soul Entertainment</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Orbitron & Exo 2 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --neon-pink: #ff77cc;
+            --neon-blue: #00ccff;
+            --text-light: #e0e0e0;
+            --glass-bg: rgba(15, 15, 25, 0.5);
+        }
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
+        .animated-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image:
+                linear-gradient(var(--neon-blue), var(--neon-blue) 1px, transparent 1px),
+                linear-gradient(90deg, var(--neon-blue), var(--neon-blue) 1px, transparent 1px);
+            background-size: 50px 50px; opacity: 0.1; animation: moveGrid 20s linear infinite;
+        }
+        @keyframes moveGrid { from { background-position: 0 0; } to { background-position: 100px 100px; } }
+        .neon-text-pink { text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink); }
+        .neon-text-blue { text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue); }
+        .glass-box {
+            background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid; border-image-slice: 1; border-width: 1px;
+            border-image-source: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+        }
+        .form-input {
+            background-color: rgba(0, 0, 0, 0.3); border: 1px solid var(--neon-blue);
+            color: var(--text-light); transition: all 0.3s ease;
+        }
+        .form-input:focus { outline: none; border-color: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
+        .form-checkbox {
+            appearance: none; width: 1.5rem; height: 1.5rem; border: 2px solid var(--neon-blue);
+            border-radius: 4px; cursor: pointer; position: relative; transition: all 0.3s ease;
+        }
+        .form-checkbox:checked { background-color: var(--neon-pink); border-color: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); }
+        .form-checkbox:checked::after {
+            content: '✓'; font-size: 1.2rem; color: var(--bg-dark); position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 119, 204, 0.5), 0 0 10px rgba(0, 204, 255, 0.5);
+        }
+        .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 20px var(--neon-pink), 0 0 20px var(--neon-blue); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .scroll-animate { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .scroll-animate.visible { opacity: 1; transform: translateY(0); }
+        .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; }
+        .file-upload-btn {
+            border: 1px solid var(--neon-blue); color: var(--neon-blue); background-color: transparent;
+            padding: 8px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .file-upload-btn:hover { background-color: var(--neon-blue); color: var(--bg-dark); box-shadow: 0 0 10px var(--neon-blue); }
+        .file-upload-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+        .file-info { display: flex; align-items: center; margin-top: 10px; min-height: 24px; }
+        .file-progress-bar { width: 0%; height: 5px; background-color: var(--neon-pink); border-radius: 5px; transition: width 0.5s ease; }
+        #estimation-result { display: none; }
+        .chance-progress-bar-bg { background-color: rgba(0,0,0,0.3); border: 1px solid var(--neon-blue); }
+        .chance-progress-bar { background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); transition: width 1.5s ease-in-out; width: 0%; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white p-4 sm:p-8">
+    <div class="animated-background"></div>
+
+    <div class="container mx-auto max-w-4xl relative z-10">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-6xl md:text-8xl font-black uppercase neon-text-pink tracking-widest">DOLLZ</h1>
+            <h2 class="text-lg md:text-2xl uppercase neon-text-blue tracking-wider mt-2">Auditions officielles – Art & Soul Entertainment</h2>
+        </header>
+
+        <!-- Introduction -->
+        <section class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+            <p class="mb-4">Bonjour à toutes ! Ce formulaire a pour but de recueillir vos informations afin de procéder à l’audition pour l’association Art and Soul. Ce projet demande du sérieux, du dévouement et de la motivation. Vous recevrez un mail à chaque étape.</p>
+            <div class="my-4 p-4 border-l-4 border-pink-500 bg-black bg-opacity-20">
+                <p>Début des auditions : <span class="font-bold text-pink-400">15/07/2025</span></p>
+                <p>Fin des auditions : <span class="font-bold text-pink-400">15/08/2025</span></p>
+            </div>
+            <p class="mb-4 text-blue-300">Règles strictes de respect, confidentialité et rigueur. Tout manquement peut entraîner l'exclusion immédiate. Les réponses sont obligatoires et confidentielles.</p>
+        </section>
+
+        <!-- Audition Form -->
+        <form id="audition-form" action="submit.php" method="POST" enctype="multipart/form-data" novalidate>
+            <!-- Section 1: Informations personnelles -->
+            <fieldset class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Informations personnelles</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label for="fullName" class="block mb-2">Prénom / Nom *</label><input type="text" id="fullName" name="fullName" class="w-full p-3 rounded-md form-input" required></div>
+                    <div><label for="email" class="block mb-2">Adresse e-mail *</label><input type="email" id="email" name="email" class="w-full p-3 rounded-md form-input" required></div>
+                    <div><label for="age" class="block mb-2">Âge *</label><input type="number" id="age" name="age" class="w-full p-3 rounded-md form-input" required></div>
+                    <div><label for="city" class="block mb-2">Ville *</label><input type="text" id="city" name="city" class="w-full p-3 rounded-md form-input" required></div>
+                </div>
+            </fieldset>
+
+            <!-- Section 2: Compétences artistiques -->
+            <fieldset class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>Compétences artistiques</legend>
+                <div class="mb-8"><h4 class="text-xl font-semibold mb-4 text-pink-400">Chant</h4><label for="chant-level" class="block mb-2">Niveau *</label><select id="chant-level" name="chant-level" class="w-full p-3 rounded-md form-input mb-4" required><option value="">Sélectionner...</option><option value="Débutant">Débutant</option><option value="Intermédiaire">Intermédiaire</option><option value="Avancé">Avancé</option></select><label class="block mb-2">Upload fichier chant (.mp3, .mp4, .wav) *</label><div class="file-upload-wrapper"><button type="button" class="file-upload-btn">Choisir un fichier</button><input type="file" name="chant-file" class="file-input" accept=".mp3,.mp4,.wav" required data-target="chant-file-info"></div><div id="chant-file-info" class="file-info"></div></div>
+                <div class="mb-8"><h4 class="text-xl font-semibold mb-4 text-pink-400">Danse</h4><label for="danse-level" class="block mb-2">Niveau *</label><select id="danse-level" name="danse-level" class="w-full p-3 rounded-md form-input mb-4" required><option value="">Sélectionner...</option><option value="Débutant">Débutant</option><option value="Intermédiaire">Intermédiaire</option><option value="Avancé">Avancé</option></select><label class="block mb-2">Upload fichier danse (.mp4, .mov) *</label><div class="file-upload-wrapper"><button type="button" class="file-upload-btn">Choisir un fichier</button><input type="file" name="danse-file" class="file-input" accept=".mp4,.mov" required data-target="danse-file-info"></div><div id="danse-file-info" class="file-info"></div></div>
+                <div><h4 class="text-xl font-semibold mb-4 text-pink-400">Rap</h4><label for="rap-level" class="block mb-2">Niveau *</label><select id="rap-level" name="rap-level" class="w-full p-3 rounded-md form-input mb-4" required><option value="">Sélectionner...</option><option value="Débutant">Débutant</option><option value="Intermédiaire">Intermédiaire</option><option value="Avancé">Avancé</option></select><label class="block mb-2">Upload fichier rap (.mp3, .mp4) *</label><div class="file-upload-wrapper"><button type="button" class="file-upload-btn">Choisir un fichier</button><input type="file" name="rap-file" class="file-input" accept=".mp3,.mp4" required data-target="rap-file-info"></div><div id="rap-file-info" class="file-info"></div></div>
+            </fieldset>
+
+            <!-- Section 3: Personnalité & Mentalité -->
+            <fieldset class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"></path><path d="M20.59 22c0-3.87-3.85-7-8.59-7s-8.59 3.13-8.59 7"></path></svg>Personnalité & Mentalité</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label for="personality-3words" class="block mb-2">Votre personnalité en 3 mots *</label><input type="text" id="personality-3words" name="personality-3words" class="w-full p-3 rounded-md form-input" required></div>
+                    <div><label for="strength" class="block mb-2">Votre plus grande force *</label><input type="text" id="strength" name="strength" class="w-full p-3 rounded-md form-input" required></div>
+                    <div class="md:col-span-2"><label for="weakness" class="block mb-2">Votre plus grande faiblesse *</label><input type="text" id="weakness" name="weakness" class="w-full p-3 rounded-md form-input" required></div>
+                    <div><label for="stress-management" class="block mb-2">Gestion du stress et de la pression *</label><textarea id="stress-management" name="stress-management" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                    <div><label for="criticism-reaction" class="block mb-2">Réaction à la critique constructive *</label><select id="criticism-reaction" name="criticism-reaction" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Très bien">Très bien, c'est une opportunité</option><option value="Bien">Bien, j'écoute</option><option value="Difficile">Avec un peu de difficulté</option></select></div>
+                    <div><label for="leadership" class="block mb-2">Plutôt leader ou suiveur ? *</label><select id="leadership" name="leadership" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Leader">Leader</option><option value="Suiveur">Suiveur</option><option value="Adaptable">Adaptable selon la situation</option></select></div>
+                    <div><label for="teamwork" class="block mb-2">Travail en groupe ou seule ? *</label><select id="teamwork" name="teamwork" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Seule">Seule</option><option value="En groupe">En groupe</option><option value="Les deux">Les deux</option></select></div>
+                    <div class="md:col-span-2"><label for="success-definition" class="block mb-2">Votre définition du succès *</label><textarea id="success-definition" name="success-definition" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                </div>
+            </fieldset>
+
+            <!-- Section 4: Culture & Influences -->
+            <fieldset class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.902 59.902 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A36.337 36.337 0 0 1 12 12.75c1.657 0 3.253-.209 4.773-.616m-9.546 0A36.337 36.337 0 0 0 12 12.75c-1.657 0-3.253-.209-4.773-.616"></path></svg>Culture & Influences</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label for="kpop-groups" class="block mb-2">Vos 3 groupes de K-pop préférés *</label><input type="text" id="kpop-groups" name="kpop-groups" class="w-full p-3 rounded-md form-input" required></div>
+                    <div><label for="inspiration" class="block mb-2">Artiste qui vous inspire le plus *</label><input type="text" id="inspiration" name="inspiration" class="w-full p-3 rounded-md form-input" required></div>
+                    <div class="md:col-span-2"><label for="concept" class="block mb-2">Votre concept de groupe de rêve *</label><textarea id="concept" name="concept" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                    <div><label for="role" class="block mb-2">Rôle visé dans le groupe *</label><input type="text" id="role" name="role" placeholder="Ex: Main Vocal, Danseuse, Rappeuse..." class="w-full p-3 rounded-md form-input" required></div>
+                    <div><label for="hidden-talents" class="block mb-2">Avez-vous des talents cachés ?</label><input type="text" id="hidden-talents" name="hidden-talents" placeholder="Composition, écriture, instrument..." class="w-full p-3 rounded-md form-input"></div>
+                </div>
+            </fieldset>
+
+            <!-- Section 5: Expérience & Vision -->
+            <fieldset class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10c0-2.28-1.01-4.38-2.6-5.83"></path><path d="M12 18a6 6 0 0 0 6-6c0-1.66-1.34-3-3-3s-3 1.34-3 3a3 3 0 1 0 3 3"></path></svg>Expérience & Vision</legend>
+                <div class="space-y-6">
+                    <div><label for="experience-scene" class="block mb-2">Votre expérience de la scène *</label><select id="experience-scene" name="experience-scene" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Jamais">Jamais</option><option value="Quelques fois">Quelques fois</option><option value="Régulièrement">Régulièrement</option></select></div>
+                    <div><label for="disponibilite" class="block mb-2">Disponibilité pour les répétitions *</label><select id="disponibilite" name="disponibilite" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="1-2 fois/semaine">1-2 fois/semaine</option><option value="3-4 fois/semaine">3-4 fois/semaine</option><option value="Flexible / Quotidienne">Flexible / Quotidienne</option></select></div>
+                    <div><label for="parcours" class="block mb-2">Avez-vous un parcours musical ou de danse ? (école, autodidacte, etc.)</label><textarea id="parcours" name="parcours" rows="3" class="w-full p-3 rounded-md form-input"></textarea></div>
+                    <div><label for="pourquoi-toi" class="block mb-2">Pourquoi toi et pas une autre ? (150 caractères min) *</label><textarea id="pourquoi-toi" name="pourquoi-toi" rows="4" class="w-full p-3 rounded-md form-input" required minlength="150"></textarea></div>
+                </div>
+            </fieldset>
+
+            <!-- Section 6: Scénarios & Vision à Long Terme -->
+            <fieldset class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.75 7.75a3 3 0 0 1 3-3h12.5a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H5.75a3 3 0 0 1-3-3v-8.5z"></path><path d="m15.5 16.5-3-3-3 3"></path><path d="M12.5 4.5v5"></path></svg>Scénarios & Vision à Long Terme</legend>
+                <div class="space-y-6">
+                    <div><label for="conflict-resolution" class="block mb-2">Comment gérez-vous un conflit créatif avec un membre ? *</label><textarea id="conflict-resolution" name="conflict-resolution" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                    <div><label for="long-term-goal" class="block mb-2">Où vous voyez-vous dans 5 ans ? *</label><textarea id="long-term-goal" name="long-term-goal" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                    <div><label for="industry-knowledge" class="block mb-2">Que savez-vous des défis de l'industrie musicale ? *</label><textarea id="industry-knowledge" name="industry-knowledge" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                    <div><label for="self-improvement" class="block mb-2">Comment comptez-vous continuer à vous améliorer ? *</label><textarea id="self-improvement" name="self-improvement" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                </div>
+            </fieldset>
+            
+            <!-- Section 7: Logistique & Engagement -->
+            <fieldset class="mb-12 p-6 md:p-8 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>Logistique & Engagement</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label for="passport" class="block mb-2">Passeport valide ? *</label><select id="passport" name="passport" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Oui">Oui</option><option value="Non">Non</option><option value="En cours">En cours</option></select></div>
+                    <div><label for="travel" class="block mb-2">Prête à voyager ? *</label><select id="travel" name="travel" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Oui">Oui, sans problème</option><option value="Oui, avec préavis">Oui, avec préavis</option><option value="Non">Non</option></select></div>
+                    <div><label for="social-media" class="block mb-2">Aisance avec les réseaux sociaux *</label><select id="social-media" name="social-media" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Très à l'aise">Très à l'aise</option><option value="Assez à l'aise">Assez à l'aise</option><option value="Peu à l'aise">Peu à l'aise</option></select></div>
+                    <div><label for="transport" class="block mb-2">Moyen de transport fiable ? *</label><select id="transport" name="transport" class="w-full p-3 rounded-md form-input" required><option value="">Sélectionner...</option><option value="Oui">Oui</option><option value="Non">Non</option></select></div>
+                    <div class="md:col-span-2"><label for="commitment" class="block mb-2">Comment gérerez-vous vos engagements (école/travail) ? *</label><textarea id="commitment" name="commitment" rows="3" class="w-full p-3 rounded-md form-input" required></textarea></div>
+                </div>
+            </fieldset>
+
+            <!-- Section 8: Conditions -->
+            <fieldset class="mb-12 p-6 rounded-lg glass-box scroll-animate">
+                <legend class="text-2xl font-bold mb-6 flex items-center gap-3 neon-text-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>Conditions</legend>
+                <div class="flex items-center"><input type="checkbox" id="terms" name="terms" class="form-checkbox mr-3" required><label for="terms">J'accepte les conditions générales de confidentialité et d'audition de Art & Soul. *</label></div>
+            </fieldset>
+
+            <!-- Submit Button -->
+            <div id="submit-container" class="text-center scroll-animate">
+                <button type="submit" id="submit-btn" class="submit-btn text-black font-bold text-xl py-4 px-12 rounded-lg uppercase tracking-wider">Envoyer ma candidature</button>
+                <p id="form-message" class="mt-4 text-lg h-6"></p>
+            </div>
+            
+            <!-- Estimation Result (shown after submit) -->
+            <div id="estimation-result" class="mt-8 p-6 rounded-lg glass-box scroll-animate">
+                 <h3 class="text-2xl font-bold mb-4 text-center neon-text-blue">Estimation de votre potentiel</h3>
+                 <div class="text-center"><p class="text-5xl font-bold neon-text-pink" id="chance-percentage">0%</p><p class="text-gray-400">Potentiel de compatibilité</p></div>
+                 <div class="w-full chance-progress-bar-bg rounded-full h-4 mt-4 overflow-hidden"><div id="chance-progress-bar" class="chance-progress-bar h-4 rounded-full"></div></div>
+            </div>
+
+        </form>
+
+        <!-- Footer -->
+        <footer class="text-center mt-20 py-6 border-t border-gray-800"><p class="text-sm text-gray-500">© 2025 Art & Soul Entertainment. Contact technique : pillebyron89@gmail.com</p></footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation au scroll
+            const scrollElements = document.querySelectorAll('.scroll-animate');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } });
+            }, { threshold: 0.1 });
+            scrollElements.forEach(el => { observer.observe(el); });
+
+            const form = document.getElementById('audition-form');
+            const messageEl = document.getElementById('form-message');
+            const submitBtn = document.getElementById('submit-btn');
+            const estimationResultEl = document.getElementById('estimation-result');
+
+            // Gestion de l'UI pour l'upload de fichiers
+            const fileInputs = document.querySelectorAll('.file-input');
+            fileInputs.forEach(input => {
+                input.addEventListener('change', function(e) {
+                    const targetId = e.target.dataset.target;
+                    const infoContainer = document.getElementById(targetId);
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        if (file.size > 100 * 1024 * 1024) { // Limite de 100MB
+                            infoContainer.innerHTML = `<span class="text-red-500">Fichier trop volumineux (max 100 Mo).</span>`;
+                            e.target.value = ''; return;
+                        }
+                        infoContainer.innerHTML = `<div class="w-full"><div class="flex justify-between items-center text-sm"><span>${file.name}</span><span class="status-icon"></span></div><div class="w-full bg-gray-700 rounded-full h-1.5 mt-1"><div class="file-progress-bar"></div></div></div>`;
+                        const progressBar = infoContainer.querySelector('.file-progress-bar');
+                        const statusIcon = infoContainer.querySelector('.status-icon');
+                        progressBar.style.width = '50%';
+                        setTimeout(() => { progressBar.style.width = '100%'; setTimeout(() => { statusIcon.innerHTML = '✅'; }, 300); }, 500);
+                    }
+                });
+            });
+
+            // Logique de soumission du formulaire
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                messageEl.textContent = '';
+                messageEl.className = 'mt-4 text-lg h-6';
+
+                // --- 1. Validation ---
+                let isValid = true;
+                form.querySelectorAll('[required]').forEach(field => {
+                    field.style.borderColor = 'var(--neon-blue)';
+                    let fieldIsValid = true;
+                    if (field.type === 'checkbox') { if (!field.checked) fieldIsValid = false; } 
+                    else if (field.type === 'file') { if (field.files.length === 0) fieldIsValid = false; } 
+                    else if (field.hasAttribute('minlength')) { if (field.value.trim().length < parseInt(field.getAttribute('minlength'))) fieldIsValid = false; }
+                    else { if (field.value.trim() === '') fieldIsValid = false; }
+
+                    if (!fieldIsValid) {
+                        isValid = false;
+                        field.style.borderColor = 'var(--neon-pink)';
+                        if(field.type === 'file') { field.closest('.file-upload-wrapper').querySelector('.file-upload-btn').style.borderColor = 'var(--neon-pink)'; }
+                    }
+                });
+
+                if (!isValid) {
+                    messageEl.textContent = 'Veuillez remplir tous les champs obligatoires.';
+                    messageEl.classList.add('text-red-500');
+                    const firstInvalidField = form.querySelector('[style*="var(--neon-pink)"]');
+                    firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+
+                // --- 2. Calculer et afficher le potentiel ---
+                const percentage = calculateChance();
+                displayResult(percentage);
+
+                // --- 3. Envoyer les données au serveur ---
+                submitBtn.disabled = true;
+                messageEl.textContent = 'Envoi de la candidature en cours...';
+                messageEl.classList.add('text-blue-400');
+                
+                const formData = new FormData(form);
+
+                fetch('submit.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        messageEl.textContent = data.message;
+                        messageEl.className = 'mt-4 text-lg h-6 text-green-500';
+                    } else {
+                        messageEl.textContent = 'Erreur: ' + data.message;
+                        messageEl.className = 'mt-4 text-lg h-6 text-red-500';
+                        submitBtn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    messageEl.textContent = 'Une erreur technique est survenue. Veuillez réessayer.';
+                    messageEl.className = 'mt-4 text-lg h-6 text-red-500';
+                    submitBtn.disabled = false;
+                });
+            });
+            
+            // --- Fonctions d'aide ---
+            function calculateChance() {
+                let score = 0; let maxScore = 0;
+                const points = {
+                    level: { 'Débutant': 5, 'Intermédiaire': 10, 'Avancé': 15 },
+                    sceneExp: { 'Jamais': 5, 'Quelques fois': 10, 'Régulièrement': 15 },
+                    dispo: { '1-2 fois/semaine': 5, '3-4 fois/semaine': 10, 'Flexible / Quotidienne': 15 },
+                    criticism: { 'Très bien': 10, 'Bien': 5, 'Difficile': 1 },
+                    leadership: { 'Leader': 5, 'Suiveur': 5, 'Adaptable': 10 },
+                    teamwork: { 'Seule': 2, 'En groupe': 10, 'Les deux': 10 },
+                    passport: { 'Oui': 5, 'En cours': 2, 'Non': 0 },
+                    travel: { 'Oui, sans problème': 10, 'Oui, avec préavis': 5, 'Non': 0 },
+                    social: { 'Très à l\'aise': 10, 'Assez à l\'aise': 5, 'Peu à l\'aise': 1 }
+                };
+                const getValue = (id) => document.getElementById(id).value;
+                score += points.level[getValue('chant-level')] || 0; maxScore += 15;
+                score += points.level[getValue('danse-level')] || 0; maxScore += 15;
+                score += points.level[getValue('rap-level')] || 0; maxScore += 15;
+                const age = parseInt(getValue('age'));
+                if (age >= 16 && age <= 24) { score += 15; } else if (age >= 15 && age <= 28) { score += 8; } maxScore += 15;
+                score += points.sceneExp[getValue('experience-scene')] || 0; maxScore += 15;
+                score += points.dispo[getValue('disponibilite')] || 0; maxScore += 15;
+                score += points.criticism[getValue('criticism-reaction')] || 0; maxScore += 10;
+                score += points.leadership[getValue('leadership')] || 0; maxScore += 10;
+                score += points.teamwork[getValue('teamwork')] || 0; maxScore += 10;
+                score += points.passport[getValue('passport')] || 0; maxScore += 5;
+                score += points.travel[getValue('travel')] || 0; maxScore += 10;
+                score += points.social[getValue('social-media')] || 0; maxScore += 10;
+                if(getValue('transport') === 'Oui') { score += 5; } maxScore += 5;
+                if (getValue('pourquoi-toi').length >= 150) score += 15; else if (getValue('pourquoi-toi').length >= 75) score += 8; maxScore += 15;
+                if (getValue('long-term-goal').length > 50) score += 5; maxScore += 5;
+                return Math.min(100, Math.round((score / maxScore) * 100));
+            }
+
+            function displayResult(percentage) {
+                estimationResultEl.style.display = 'block';
+                estimationResultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const percentageEl = document.getElementById('chance-percentage');
+                const progressBar = document.getElementById('chance-progress-bar');
+                let currentPercent = 0;
+                percentageEl.textContent = `0%`;
+                const interval = setInterval(() => {
+                    currentPercent++;
+                    if (currentPercent > percentage) { clearInterval(interval); percentageEl.textContent = `${percentage}%`; return; }
+                    percentageEl.textContent = `${currentPercent}%`;
+                }, 20);
+                progressBar.style.width = `${percentage}%`;
+            }
+        });
+    </script>
+</body>
+</html>
